@@ -55,188 +55,174 @@ class _SideBarState extends State<SideBar>
         loggedInUser = user;
         print(loggedInUser.email);
       }
-
-      widget.
     } catch (e) {
       print(e);
     }
-
   }
 
-  void signOut() async {
-    await _auth.signOut();
-  }
-
-  void onIconPressed() {
-    final animationStatus = _animationController.status;
-    final isAnimationCompleted = animationStatus == AnimationStatus.completed;
-
-    if (isAnimationCompleted) {
-      isSideBarOpenedSink.add(false);
-      _animationController.reverse();
-    } else {
-      isSideBarOpenedSink.add(true);
-      _animationController.forward();
+    void signOut() async {
+      await _auth.signOut();
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    final screenwidth = MediaQuery.of(context).size.width;
+    void onIconPressed() {
+      final animationStatus = _animationController.status;
+      final isAnimationCompleted = animationStatus == AnimationStatus.completed;
 
-    return StreamBuilder<bool>(
-      initialData: false,
-      stream: isSideBarOpenedStream,
-      builder: (context, isSideBarOpenedAsync) {
-        return AnimatedPositioned(
-          duration: _animationDuration,
-          top: 0,
-          bottom: 0,
-          left: isSideBarOpenedAsync.data ? 0 : -screenwidth,
-          right: isSideBarOpenedAsync.data ? 0 : screenwidth - 45,
-          //curve: Curves.elasticOut,
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  color: Colors.green,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 100,
-                      ),
-                      FutureBuilder(
-                        future: Provider.of(context).auth.getCurrentU(),
-                        builder: (context, snapshot){
-                          if(snapshot.connectionState == ConnectionState.done){
-                            return displayUserInfo(context, snapshot);
-                          } else{
-                            return CircularProgressIndicator();
-                          }
-                        },
-                      ),
-                      Divider(
-                        height: 64,
-                        thickness: 0.5,
-                        color: Colors.greenAccent,
-                        indent: 32,
-                        endIndent: 32,
-                      ),
-                      MenuItem(
-                        icon: Icons.home,
-                        title: "Home",
-                        onTap: () {
-                          onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.HomePageClickedEvent);
-                        },
-                      ),
-                      MenuItem(
-                        icon: Icons.question_answer,
-                        title: "Training Library",
-                        onTap: () {
-                          onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.TrainingLibClickedEvent);
-                        },
-                      ),
-                      MenuItem(
-                        icon: Icons.assessment,
-                        title: "Reports",
-                      ),
-                      Divider(
-                        height: 64,
-                        thickness: 0.5,
-                        color: Colors.greenAccent,
-                        indent: 32,
-                        endIndent: 32,
-                      ),
-                      MenuItem(
-                        icon: Icons.settings,
-                        title: "Settings",
-                      ),
-                      MenuItem(
-                        icon: Icons.exit_to_app,
-                        title: "Logout",
-                        onTap: () {
-                          onIconPressed();
-                          signOut();
-                          // BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.LogoutClickedEvent);
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return loginPage();
-                          }));
-                          // Navigator.pop(context);
-                        },
-                      ),
-                    ],
+      if (isAnimationCompleted) {
+        isSideBarOpenedSink.add(false);
+        _animationController.reverse();
+      } else {
+        isSideBarOpenedSink.add(true);
+        _animationController.forward();
+      }
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      final screenwidth = MediaQuery
+          .of(context)
+          .size
+          .width;
+
+      return StreamBuilder<bool>(
+        initialData: false,
+        stream: isSideBarOpenedStream,
+        builder: (context, isSideBarOpenedAsync) {
+          return AnimatedPositioned(
+            duration: _animationDuration,
+            top: 0,
+            bottom: 0,
+            left: isSideBarOpenedAsync.data ? 0 : -screenwidth,
+            right: isSideBarOpenedAsync.data ? 0 : screenwidth - 45,
+            //curve: Curves.elasticOut,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: Colors.green,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 100,
+                        ),
+                        ListTile(
+                          title: Text(
+                            "User",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "user@user.com",
+                            style: TextStyle(
+                              color: Colors.greenAccent,
+                              fontSize: 20,
+                              //fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          leading: CircleAvatar(
+                            child: Icon(
+                              Icons.perm_identity,
+                              color: Colors.white,
+                            ),
+                            radius: 40,
+                          ),
+
+                        ),
+                        Divider(
+                          height: 64,
+                          thickness: 0.5,
+                          color: Colors.greenAccent,
+                          indent: 32,
+                          endIndent: 32,
+                        ),
+                        MenuItem(
+                          icon: Icons.home,
+                          title: "Home",
+                          onTap: () {
+                            onIconPressed();
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.HomePageClickedEvent);
+                          },
+                        ),
+                        MenuItem(
+                          icon: Icons.question_answer,
+                          title: "Training Library",
+                          onTap: () {
+                            onIconPressed();
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.TrainingLibClickedEvent);
+                          },
+                        ),
+                        MenuItem(
+                          icon: Icons.assessment,
+                          title: "Reports",
+                        ),
+                        Divider(
+                          height: 64,
+                          thickness: 0.5,
+                          color: Colors.greenAccent,
+                          indent: 32,
+                          endIndent: 32,
+                        ),
+                        MenuItem(
+                          icon: Icons.settings,
+                          title: "Settings",
+                        ),
+                        MenuItem(
+                          icon: Icons.exit_to_app,
+                          title: "Logout",
+                          onTap: () {
+                            onIconPressed();
+                            signOut();
+                            // BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.LogoutClickedEvent);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                                  return loginPage();
+                                }));
+                            // Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment(0, -0.9),
-                child: GestureDetector(
-                  onTap: () {
-                    onIconPressed();
-                  },
-                  child: ClipPath(
-                    clipper: CustomMenuClipper(),
-                    child: Container(
-                      //the white strip
-                      alignment: Alignment.centerLeft,
-                      width: 35,
-                      height: 110,
-                      color: Colors.green,
-                      child: AnimatedIcon(
-                        progress: _animationController.view,
-                        icon: AnimatedIcons.menu_close,
-                        color: Colors.greenAccent,
-                        size: 25,
+                Align(
+                  alignment: Alignment(0, -0.9),
+                  child: GestureDetector(
+                    onTap: () {
+                      onIconPressed();
+                    },
+                    child: ClipPath(
+                      clipper: CustomMenuClipper(),
+                      child: Container(
+                        //the white strip
+                        alignment: Alignment.centerLeft,
+                        width: 35,
+                        height: 110,
+                        color: Colors.green,
+                        child: AnimatedIcon(
+                          progress: _animationController.view,
+                          icon: AnimatedIcons.menu_close,
+                          color: Colors.greenAccent,
+                          size: 25,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
-}
 
 
-Widget displayUserInfo(context, snapshot){
 
-  final user = snapshot.data;
-
-  return ListTile(
-    title: Text(
-      "User",
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 30,
-        fontWeight: FontWeight.w800,
-      ),
-    ),
-    subtitle: Text(
-      "${user.email}",
-      style: TextStyle(
-        color: Colors.greenAccent,
-        fontSize: 20,
-        //fontWeight: FontWeight.w800,
-      ),
-    ),
-    leading: CircleAvatar(
-      child: Icon(
-        Icons.perm_identity,
-        color: Colors.white,
-      ),
-      radius: 40,
-    ),
-
-  );
-}
 
 class CustomMenuClipper extends CustomClipper<Path> {
   @override
