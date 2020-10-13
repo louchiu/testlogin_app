@@ -10,6 +10,7 @@ class AuthService{
 
   Stream<String> get onAuthStateChanged => _auth.authStateChanges().map((User user) => user?.uid,);
 
+
   //GET CURRENT UID
   Future<String> getCurrentUID() async {
 
@@ -32,3 +33,4 @@ class AuthService{
 
 
 }
+

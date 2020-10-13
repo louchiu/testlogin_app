@@ -177,6 +177,7 @@ class _SideBarState extends State<SideBar>
                           onTap: () {
                             onIconPressed();
                             signOut();
+                            print(loggedInUser.email);
                             // BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.LogoutClickedEvent);
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
